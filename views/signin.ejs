@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include('./partials/head') %>
+  <title>signin</title>
+</head>
+<body>
+  <%- include('./partials/navbar') %>
+  <div class="container">
+    <form id="signinForm">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required>
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="password" required>
+      </div>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+  
+  <script>
+    document.getElementById('signinForm').addEventListener('submit', async function(event) {
+      event.preventDefault(); // Prevent the form from submitting the traditional way
+  
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+  
+      try {
+        const response = await fetch('/user/signin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Sign-in successful:', data);
+          // Handle success, e.g., redirect the user or show a success message
+        } else {
+          console.error('Sign-in failed:', response.statusText);
+          // Handle error, e.g., show an error message
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    });
+  </script>
+  
+  <%- include('./partials/script') %>
+</body>
+</html>
