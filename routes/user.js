@@ -33,7 +33,9 @@ router.post('/signin', async(req, res)=>{
 //   return res.redirect("/")
 
 try {
-  const user = await User.matchPassword(email, password); // Assuming this function exists and validates the user
+  const user = await User.matchPasswordAndGenerateToken(email, password); // Assuming this function exists and validates the user
+
+  console.log("user",user)
   if (user) {
     return res.redirect('/'); // Redirect to home page on successful signin
   } else {

@@ -1,5 +1,6 @@
 const {createHmac,randomBytes} = require('crypto')
-const {Schema, model} = require('mongoose')
+const {Schema, model} = require('mongoose');
+const { createTokenForUser } = require('../services/authentication');
 const userSchema = new Schema({
   fullName:{
     type:String,
@@ -46,7 +47,7 @@ next();
 }
 )
 // Static method to match email and password
-userSchema.statics.matchPassword = async function(email,password){
+userSchema.statics.matchPasswordAndGenerateToken = async function(email,password){
   const user = await this.findOne({email});
   if(!user) throw new Error("user not found")
     // Generate hash using stored salt
@@ -62,10 +63,12 @@ userSchema.statics.matchPassword = async function(email,password){
 
 // return {...user, password:undefined, salt:undefined}
 // })
+const token = createTokenForUser(user);
+return token;
   
   // Return user details without sensitive fields
-  const { password: _, salt: __, ...userWithoutSensitiveData } = user.toObject();
-  return userWithoutSensitiveData;
+  // const { password: _, salt: __, ...userWithoutSensitiveData } = user.toObject();
+  // return userWithoutSensitiveData;
 };
 
 const Users = model('user',userSchema);
