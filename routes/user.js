@@ -37,9 +37,9 @@ try {
   const token = await User.matchPasswordAndGenerateToken(email, password); // Assuming this function exists and validates the user
 
   console.log("token",token)
-  try (token) {
     return res.cookie("token",token).redirect('/'); // Redirect to home page on successful signin
-  } 
+  
+  
   // else {
   //   return res.status(401).send('Invalid email or password'); // Error for invalid credentials
   // }
