@@ -14,36 +14,39 @@ router.get("/signup", (req,res)=>{
 
 
 // Handle signup POST request
-router.post('user/signup', async (req, res) => {
+router.post('/signup', async (req, res) => {
   console.log(req.body)
   const { fullName, email, password } = req.body; // Corrected req.body
   try {
     await User.create({ fullName, email, password }); // Creates a new user
-    return res.redirect('/'); // Redirect to home page on successful signup
+    return res.redirect('/user/signin'); // Redirect to home page on successful signup
   } catch (err) {
     console.error(err);
-    return res.status(500).send('Server error');
+    return res.status(500).send('Serrrrver error');
   }
 });
 
 
 router.post('/signin', async(req, res)=>{
   const {email, password} = req.body;
-//   const user = User.matchPassword(email,password)
-//   return res.redirect("/")
+  console.log("email",email,"password" ,password)
+  // const user = await User.matchPasswordAndGenerateToken(email,password)
+  // console.log("users",user)
 
 try {
-  const user = await User.matchPasswordAndGenerateToken(email, password); // Assuming this function exists and validates the user
+  const token = await User.matchPasswordAndGenerateToken(email, password); // Assuming this function exists and validates the user
 
-  console.log("user",user)
-  if (user) {
-    return res.redirect('/'); // Redirect to home page on successful signin
-  } else {
-    return res.status(401).send('Invalid email or password'); // Error for invalid credentials
-  }
+  console.log("token",token)
+  try (token) {
+    return res.cookie("token",token).redirect('/'); // Redirect to home page on successful signin
+  } 
+  // else {
+  //   return res.status(401).send('Invalid email or password'); // Error for invalid credentials
+  // }
 } catch (err) {
-  console.error(err);
-  return res.status(500).send('Server error');
+ return res.render('signin',{
+  error:"Incorrect emmail or password"
+ })
 }
 });
 
