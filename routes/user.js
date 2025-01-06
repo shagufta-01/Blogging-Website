@@ -2,14 +2,10 @@ const express = require('express');
 const User= require('../models/user')
 const router = express.Router();
 
-router.get("/signin", (req,res)=>{
-  return res.render("signin")
-})
-
-
 
 router.get("/signup", (req,res)=>{
   return res.render("signup")
+  
 })
 
 
@@ -25,6 +21,11 @@ router.post('/signup', async (req, res) => {
     return res.status(500).send('Serrrrver error');
   }
 });
+
+router.get("/user/signin", (req,res)=>{
+  return res.render("signin")
+})
+
 
 
 router.post('/signin', async(req, res)=>{
